@@ -1,0 +1,43 @@
+
+vl_sift_setup.m
+test.m
+vl_ikmeans.m
+bof.m
+svmtrain.m
+svmpredict.m
+____________________________________________________________
+train 数据集：
+1. 提取特征
+[train_frames, train_discriptors, train_count_point,training_label_vector] = test();
+
+train_centers = vl_ikmeans(train_discriptors,500);
+
+Sift_train = bof(train_discriptors, train_count_point, double(train_centers));
+1.1 test_label_vector.m 标出label向量来，然后对这个结果再做一个转置。就是下一步svmtrain里面的输入training_label_vector
+2. 训练模型
+model = svmtrain(training_label_vector,Sift_train);
+_________________________________________________________________
+test数据集：
+1. 提取特征
+[test_frames, test_discriptors, test_count_point,test_video_name] = test();
+
+Sift_test = bof(test_discriptors, test_count_point, double(train_centers));
+2. 使用模型预测
+[predict_label, accuracy, dec_values] = svmpredict(testing_label_vector, Sift_test, model);
+__________________________________________________________________
+
+1. 2788个jpg,跑sift_feature ((test())，用了30分钟
+2. k-means 
+
+
+
+
+1. 从google download 较好的图片集
+2. 提MFCC特征
+3. 前期处理的功能做界面
+
+
+
+
+
+

@@ -1,26 +1,12 @@
 package com.apple.video.offlineprocess;
 
 import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.ProgressBar;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Button;
 
 public class testUI {
 	private Display display = Display.getDefault();
 	private Shell shell = new Shell();
 	private Task task = new Task(this);//Task 为后台处理类
 	
-//	private String filefolder;//视频文件夹   见 filechoice
 	private String[] files;//视频文件集合
 //	将界面组件设为类的实例变量
 	
@@ -69,19 +55,6 @@ public class testUI {
 		addVideoButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 				startButton.setEnabled(true);
-//				DirectoryDialog dlg = new DirectoryDialog(shell);
-//				dlg.setText("打开");
-//				dlg.setMessage("选择视频文件夹：");
-//				dlg.setFilterPath("c:/");
-//				String dir = dlg.open();
-//				if(dir!= null)
-//				{
-//					filefolder = dir;
-//					System.out.println(dir);
-//				}
-//		TODO: file choice		
-				
-//				这个file写得挺美的，但是与后边的程序不符
 				FileDialog dlg = new FileDialog(shell,SWT.OPEN|SWT.MULTI);
 				dlg.setFilterNames(new String[]{"视频文件(*.mp4)","视频文件(*.flv)","视频文件(*.wmv)"});
 				dlg.setFilterExtensions(new String[]{"*.mp4","*.flv","*.wmv","."});
@@ -115,8 +88,12 @@ public class testUI {
 		 * TODO：建立索引按钮的动作
 		 * */
 		
-		consoleText = new Text(shell,SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
+		/*
+		 * 程序执行情况输出
+		 * */
+		consoleText = new Text(shell,SWT.MULTI|SWT.BORDER|SWT.V_SCROLL|SWT.H_SCROLL);
 		consoleText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 		progressBar = new ProgressBar(shell,SWT.NONE);
 		progressBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -142,7 +119,6 @@ public class testUI {
 				String dir = dlg.open();
 				if(dir!= null)
 					text.setText(dir);
-//					System.out.println(dir);
 			}
 			
 //			
@@ -155,47 +131,22 @@ public class testUI {
 		startButton.setEnabled(false);
 		/*
 		 * 开始按钮
-		 * TODO：考虑text里面的内容合适的时候再开始
+		 * TODO：校验
+		 * 考虑text里面的内容合适的时候再开始
 		 * */
 		startButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 				setButtonState(false);
-//				final String filefolder = files[0].substring(0,files[0].lastIndexOf("/"));
-//				System.out.println(filefolder);
 				final String outpath = text.getText();
 				final int taskCount = files.length;
-				//设置进度条的格数
-				progressBar.setMaximum(taskCount-1);
-				consoleText.insert("后台处理线程开始启动......\n");
-				//为后台开启一个新线程
-				new Thread(){
+				progressBar.setMaximum(taskCount-1);//设置进度条的格数
+				new Thread(){//为后台开启一个新线程
 					public void run(){
-//						TODO: 工作线程，需要 filepath / outputpath
 						task.start(files,outpath,taskCount);
 					}
-					
 				}.start();
-				consoleText.insert("后台处理线程启动结束\n");
 			}
 		});
-//		startButton.addSelectionListener(new SelectionAdapter(){
-//			public void widgetSelected(SelectionEvent e){
-//				setButtonState(false);
-//				String str = text.getText();
-//				final int taskCount = new Integer(str).intValue();
-//				//设置进度条的格数
-//				progressBar.setMaximum(taskCount-1);
-//				consoleText.insert("后台处理线程开始启动......\n");
-//				//为后台开启一个新线程
-//				new Thread(){
-//					public void run(){
-//						task.start(taskCount);
-//					}
-//					
-//				}.start();
-//				consoleText.insert("后台处理线程启动结束\n");
-//			}
-//		});
 		//停止按钮
 		stopButton = new Button(group, SWT.NONE);
 		stopButton.setText("\u505C\u6B62");
@@ -203,9 +154,9 @@ public class testUI {
 		stopButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 				task.stop();//后台任务停止
-				
 			}
 		});
+		
 		shell.layout();
 		shell.open();
 		while(!shell.isDisposed()){
@@ -221,6 +172,7 @@ public class testUI {
 	public Shell getShell(){
 		return shell;
 	}
+//	TODO：把Text填一个滚动条
 	public Text getConsoleText(){
 		return consoleText;
 	}

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- 定义编译该项目的基本信息-->
+<project name="spring" basedir="." default="run">
+	<!-- 定义编译和运行该项目时所需的库文件 -->
+	<path id="classpath">
+	<!--该路径下存放spring.jar和其他第三方类库-->
+	<fileset dir="..\..\lib">
+		<include name="*.jar"/>
+	</fileset>
+	<!-- 同时还需要引用已经编译过的class文件-->
+	<pathelement path="."/>
+	</path>
+	
+	<!--编译全部的java 文件-->
+	<target name="compile" description="Compile all source code">
+		<!-- 指定需要编译的源文件的存放位置-->
+		<javac destdir="." debug = "true" deprecation="false" optimize="false" failonerror="true">
+			<!--指定需要编译的源文件的存放位置-->
+			<src path="."/>
+			<!-- 指定编译这些java文件需要的类库的位置-->
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+	<!--运行特定的主程序-->
+	<target name="run" description="run the main class" depends="compile">
+		<!--指定运行的主程序:testSpring.BeanTest.-->
+		<java classname="testSpring.BeanTest" fork="yes" failonerror="true">
+			<!--指定运行这些java文件需要的类库位置-->
+			<classpath refid="classpath"/>
+		</java>
+	</target>
+</project>

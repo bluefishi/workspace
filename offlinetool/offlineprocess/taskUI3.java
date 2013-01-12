@@ -36,7 +36,8 @@ import org.eclipse.swt.widgets.Button;
 public class taskUI3 {
 	private Shell shell = new Shell();
 	private Task3 task = new Task3(this);
-	private TaskProcess tprocess = new TaskProcess(this);
+	private TaskProcess taskprocess = new TaskProcess(this);
+	private TaskIndex taskindex = new TaskIndex(this);
 	
 	private Table table;
 	
@@ -69,7 +70,20 @@ public class taskUI3 {
 	private Text savepathtext;//保存图片和视频的位置
 	private Text pictext;//标注是picture的path
 	private Text wavtext;//语音识别是wav的path
-	private Text psavepathtext;
+	private Button wav_check;//是否要处理语音
+	private Button pic_check;//是否要处理图片
+	private Text psavepathtext;//处理结果的保存位置
+	private Label label_2;
+	private Text indexsource;
+	private Label lblIndex;
+	private Text indexpath;
+	private Button indexButton;
+	private Button button;
+	private Button btnRadioButton;
+	private Label label_index;//index建立完，反馈给界面
+	private Label label_3;
+	private Label label_4;
+	private Label label_5;
 	
 	/**
 	 * Launch the application.
@@ -90,7 +104,7 @@ public class taskUI3 {
 	public void open() {
 		Display display = Display.getDefault();
 //		Shell shell = new Shell();
-		shell.setSize(819, 469);
+		shell.setSize(660, 444);
 		shell.setText("视频处理工具");
 		shell.setLayout(new GridLayout());
 		
@@ -181,12 +195,39 @@ public class taskUI3 {
 			}
 		});
 		
-		//composite是盛放除了上面三个button以外所有东西的容器
-//		TODO:显示一个初始界面，写上操作手册
+		
 		composite = new Composite(shell, SWT.NONE);
 		stacklayout = new StackLayout();
 		composite.setLayout(stacklayout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		/*操作手册*/
+		final Composite composite_0 = new Composite(composite,SWT.NONE);
+		composite_0.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite_0.setLayout(new GridLayout(3,false));
+		final Label label_intro = new Label(composite_0,SWT.NONE);
+		label_intro.setText("操作指南:");
+		composite_0.layout();
+		stacklayout.topControl=composite_0;
+		new Label(composite_0, SWT.NONE);
+		new Label(composite_0, SWT.NONE);
+		new Label(composite_0, SWT.NONE);
+		new Label(composite_0, SWT.NONE);
+		
+		label_3 = new Label(composite_0, SWT.NONE);
+		label_3.setText("1. \u70B9\u51FB\u201C\u6DFB\u52A0\u89C6\u9891\u201D\u6309\u94AE\uFF0C\u6DFB\u52A0\u89C6\u9891\u5E76\u62BD\u53D6\u5173\u952E\u5E27\u548C\u97F3\u9891\u3002");
+		new Label(composite_0, SWT.NONE);
+		new Label(composite_0, SWT.NONE);
+		
+		label_4 = new Label(composite_0, SWT.NONE);
+		label_4.setText("2. \u70B9\u51FB\u201C\u5904\u7406\u89C6\u9891\u201D\u6309\u94AE\uFF0C\u6807\u6CE8\u56FE\u7247\uFF0C\u5BF9\u89C6\u9891\u8FDB\u884C\u8BED\u97F3\u8BC6\u522B\u3002");
+		new Label(composite_0, SWT.NONE);
+		new Label(composite_0, SWT.NONE);
+		
+		label_5 = new Label(composite_0, SWT.NONE);
+		label_5.setText("3. \u70B9\u51FB\u201D\u5EFA\u7ACB\u7D22\u5F15\u201C\u6309\u94AE\uFF0C\u9009\u62E9\u7D22\u5F15\u6E90\u6587\u4EF6\uFF0C\u5BF9\u6587\u672C\u6587\u4EF6\u5EFA\u7ACB\u7D22\u5F15\u3002");
+		composite.layout();
+		
 		
 		//composite_1,composite_2,composite_3 是放三个button对应的功能界面的
 		/*
@@ -220,7 +261,7 @@ public class taskUI3 {
 		
 		Group group_1 = new Group(composite_1, SWT.NONE);
 		group_1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		group_1.setLayout(new GridLayout(8,false));
+		group_1.setLayout(new GridLayout(10,false));
 		
 		Label label = new Label(group_1, SWT.NONE);
 		label.setText("\u8F93\u51FA\u8DEF\u5F84\uFF1A");
@@ -261,38 +302,46 @@ public class taskUI3 {
 		new Label(group_1, SWT.NONE);
 		new Label(group_1, SWT.NONE);
 		new Label(group_1, SWT.NONE);
-		final Button startButton = new Button(group_1, SWT.NONE);
-		startButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+				new Label(group_1, SWT.NONE);
+				new Label(group_1, SWT.NONE);
+				final Button startButton = new Button(group_1, SWT.NONE);
+				GridData gd_startButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				gd_startButton.widthHint = 64;
+				startButton.setLayoutData(gd_startButton);
+				startButton.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
 //				setButtonState(false);
 //				TODO:这里有个业务逻辑需要设计，点击开始之后会怎么样影响其他的按钮
-				startButton.setEnabled(false);
-				final String outpath = savepathtext.getText();//获取保存路径
-				final int taskCount = files.length;//要处理的文件的总数
-				progressBar.setMaximum(taskCount);//设置进度条的格数
-				new Thread(){//为后台开启一个新线程
-					public void run(){
-						task.start(files,outpath,taskCount);
-					}
-				}.start();
-				cancelButton.setEnabled(true);
-			}
-		});
-		startButton.setText("\u5F00\u59CB");
-		//		TODO:现在取消还是有问题，不能立刻停下来，需要等那个线程跑好了才可以响应这个事件
-				cancelButton = new Button(group_1, SWT.NONE);
-				cancelButton.setText("\u53D6\u6D88");
-				cancelButton.setEnabled(false);
-				cancelButton.addSelectionListener(new SelectionAdapter(){
-					public void widgetSelected(SelectionEvent e){
-//				void openWarning(Shell parent,String title,String message);
-						boolean b = MessageDialog.openConfirm(shell, "标题", "你确定要取消吗？");
-						if(b)
-							task.stop();
-						else
-							System.out.println("我不是想取消");
+						startButton.setEnabled(false);
+						final String outpath = savepathtext.getText();//获取保存路径
+						final int taskCount = files.length;//要处理的文件的总数
+						progressBar.setMaximum(taskCount);//设置进度条的格数
+						new Thread(){//为后台开启一个新线程
+							public void run(){
+								task.start(files,outpath,taskCount);
+							}
+						}.start();
+						cancelButton.setEnabled(true);
 					}
 				});
+				startButton.setText("\u5F00\u59CB");
+				//		TODO:现在取消还是有问题，不能立刻停下来，需要等那个线程跑好了才可以响应这个事件
+						cancelButton = new Button(group_1, SWT.NONE);
+						GridData gd_cancelButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+						gd_cancelButton.widthHint = 61;
+						cancelButton.setLayoutData(gd_cancelButton);
+						cancelButton.setText("\u53D6\u6D88");
+						cancelButton.setEnabled(false);
+						cancelButton.addSelectionListener(new SelectionAdapter(){
+							public void widgetSelected(SelectionEvent e){
+//				void openWarning(Shell parent,String title,String message);
+								boolean b = MessageDialog.openConfirm(shell, "标题", "你确定要取消吗？");
+								if(b)
+									task.stop();
+								else
+									System.out.println("我不是想取消");
+							}
+						});
 		}
 		
 		/*
@@ -313,21 +362,23 @@ public class taskUI3 {
 		label_1.setBounds(23, 28, 61, 17);
 		label_1.setText("\u9009\u62E9\uFF1A");
 		
-		Button button_1 = new Button(group_2, SWT.CHECK);
-		button_1.setBounds(40, 66, 69, 17);
-		button_1.setText("\u56FE\u50CF\u6807\u6CE8");
+		Button pic_check = new Button(group_2, SWT.CHECK);//图像标注的复选框
+		pic_check.setSelection(true);
+		pic_check.setBounds(40, 66, 69, 17);
+		pic_check.setText("\u56FE\u50CF\u6807\u6CE8");
 		
-		Button button_2 = new Button(group_2, SWT.CHECK);
-		button_2.setBounds(40, 102, 69, 17);
-		button_2.setText("\u8BED\u97F3\u8BC6\u522B");
+		wav_check = new Button(group_2, SWT.CHECK);//语音识别的复选框
+		wav_check.setSelection(true);
+		wav_check.setBounds(40, 102, 69, 17);
+		wav_check.setText("\u8BED\u97F3\u8BC6\u522B");
 		
 		pictext = new Text(group_2, SWT.BORDER);
-		pictext.setBounds(118, 60, 147, 23);
+		pictext.setBounds(118, 60, 210, 23);
 		String picpath = savepathtext.getText()+"\\frames";
 		pictext.setText(picpath);
 		
 		wavtext = new Text(group_2, SWT.BORDER);
-		wavtext.setBounds(118, 96, 147, 23);
+		wavtext.setBounds(118, 96, 210, 23);
 		String wavpath = savepathtext.getText()+"\\wav";
 		wavtext.setText(wavpath);
 		
@@ -336,7 +387,7 @@ public class taskUI3 {
 		label.setText("\u4FDD\u5B58\u8DEF\u5F84\uFF1A");
 		
 		psavepathtext = new Text(group_2, SWT.BORDER);
-		psavepathtext.setBounds(118, 171, 152, 23);
+		psavepathtext.setBounds(118, 171, 210, 23);
 		String psavepath = savepathtext.getText()+"\\processresult";
 		psavepathtext.setText(psavepath);
 		
@@ -359,11 +410,12 @@ public class taskUI3 {
 		pstartbutton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 //				TODO:校验路径
-				final String inpath = wavtext.getText();
+				final String wavinpath = wavtext.getText();
+				final String picinpath = pictext.getText();
 				final String outpath = psavepathtext.getText();
 				new Thread(){//为后台开启一个新线程
 					public void run(){
-						tprocess.start(inpath, outpath);
+						taskprocess.start(wavinpath,picinpath, outpath);
 					}
 				}.start();
 			}
@@ -374,9 +426,106 @@ public class taskUI3 {
 		/*
 		 * composite_3下面的功能界面
 		 * */
+		//composite_3
 		composite_3 = new Composite(composite, SWT.NONE);
 		composite_3.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite_3.setLayout(new GridLayout(1,false));//table,progressbar,group
+		composite_3.setLayout(new GridLayout(4,false));//table,progressbar,group
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		
+		button = new Button(composite_3, SWT.RADIO);
+		button.setText("新建索引文件");
+		button.setSelection(true);
+//		btnRadioButton.setText("Radio Button");
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		
+		btnRadioButton = new Button(composite_3, SWT.RADIO);
+		btnRadioButton.setText("向已有索引中追加內容");
+		btnRadioButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		
+		label_2 = new Label(composite_3, SWT.NONE);
+		label_2.setText("\u9009\u62E9\u6E90\u6587\u4EF6\uFF1A");
+		
+		indexsource = new Text(composite_3, SWT.BORDER);
+		GridData gd_text = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_text.widthHint = 224;
+		indexsource.setLayoutData(gd_text);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		
+		lblIndex = new Label(composite_3, SWT.NONE);
+		lblIndex.setText("index\u4F4D\u7F6E\uFF1A");
+		
+		indexpath = new Text(composite_3, SWT.BORDER);
+		GridData gd_text_1 = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_text_1.widthHint = 224;
+		indexpath.setLayoutData(gd_text_1);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		
+		indexButton = new Button(composite_3, SWT.NONE);
+		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_button.widthHint = 73;
+		indexButton.setLayoutData(gd_button);
+		indexButton.setText("开始");
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		new Label(composite_3, SWT.NONE);
+		
+		label_index = new Label(composite_3, SWT.NONE);
+		label_index.setText("\u7CFB\u7EDF\u4FE1\u606F\uFF1A");
+		indexButton.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent e)
+			{
+//			TODO
+				//索引传入的文件是raw文件，在索引里面要对这些文件进行处理先
+				final String sourcePath = indexsource.getText();//"";
+				final String indexPath = indexpath.getText();//"";
+				System.out.println("indexsource:"+indexsource);
+				System.out.println("indexpath:"+indexpath);
+				
+				new Thread(){
+					public void run(){
+						taskindex.start(sourcePath,indexPath);
+//						label_index.setText(label_index.getText()+"索引建好啦！");
+					}
+				}.start();
+//				TODO:索引建好有反馈的，告诉界面索引已经建好了
+//				label_index.setText(label_index.getText()+"索引建好啦！");
+			}
+		});
+		
+		//composite_3
 		
 		
 		shell.open();
@@ -391,25 +540,13 @@ public class taskUI3 {
 	/*设置路径*/
 	private void setPaths(String dir)
 	{
-//		 savepathtext.getText()+"processresult";
 		savepathtext.setText(dir);
 		pictext.setText(dir+"\\frames");
 		wavtext.setText(dir+"\\wav");
 		psavepathtext.setText(dir+"\\out");
 	}
-	/*得到gui中的路径，传给Task*/
-	public String getPath(String textname)
-	{
-		if(textname.equals("wavtext"))
-			return wavtext.getText();
-		else if(textname.equals("pictext"))
-			return pictext.getText();
-		else if(textname.equals("psavepathtext"))
-			return psavepathtext.getText();
-		else
-			return null;
-		
-	}
+	
+	
 	
 	/*控制processButton*/
 	public void setprocessBtnState(boolean bFlag)
@@ -424,11 +561,37 @@ public class taskUI3 {
 	public Shell getShell(){
 		return shell;
 	}
-
 	public TableViewer getConsoleTableViewer(){
 		return tv;
 	}
 	public ProgressBar getProgressBar(){
 		return progressBar;
+	}
+	
+	public String getPath(String textname)/*得到gui中的路径，传给Task*/
+	{
+		if(textname.equals("wavtext"))
+			return wavtext.getText();
+		else if(textname.equals("pictext"))
+			return pictext.getText();
+		else if(textname.equals("psavepathtext"))
+			return psavepathtext.getText();
+		else
+			return null;
+	}
+	public boolean getCheck(String checkname)/*得到check的值	 * 想是通过这个函数判断某一个check是否被选中*/
+	{
+		if(checkname.equals("wav_check"))
+			return wav_check.getSelection();
+		else if(checkname.equals("pic_check"))
+			return pic_check.getSelection();
+		else
+			System.out.println("请检查代码中check是否写错");
+		return false;
+	}
+	
+	/*索引建立完的反馈，但是现在没有使用*/
+	public void fromIndexLabel(String message){
+		label_index.setText(label_index.getText()+message);
 	}
 }

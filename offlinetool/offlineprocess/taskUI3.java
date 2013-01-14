@@ -1,5 +1,6 @@
 package com.apple.video.offlineprocess;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -350,76 +351,165 @@ public class taskUI3 {
 		//composite_2
 		composite_2 = new Composite(composite, SWT.NONE);
 		composite_2.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite_2.setLayout(new GridLayout(4,false));
+		composite_2.setLayout(new GridLayout(1,false));
 		
 		group_2 = new Group(composite_2, SWT.NONE);
-		GridData gd_group_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_group_2.widthHint = 372;
-		gd_group_2.heightHint = 274;
-		group_2.setLayoutData(gd_group_2);
+//		GridData gd_group_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+//		gd_group_2.widthHint = 372;
+//		gd_group_2.heightHint = 274;
+//		group_2.setLayoutData(gd_group_2);
+		group_2.setLayoutData(new GridData(GridData.FILL_BOTH));
+		group_2.setLayout(new GridLayout(5,false));
 		
 		label_1 = new Label(group_2, SWT.NONE);
-		label_1.setBounds(23, 28, 61, 17);
-		label_1.setText("\u9009\u62E9\uFF1A");
+//		label_1.setLayoutData(new GridData(GridData.CENTER));
+//		label_1.setBounds(23, 28, 61, 17);
+		label_1.setText("选择功能：");
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+//		pictext.setBounds(118, 60, 210, 23);
+		String picpath = savepathtext.getText()+"\\frames";
+//		wavtext.setBounds(118, 96, 210, 23);
+		String wavpath = savepathtext.getText()+"\\wav";
+//		psavepathtext.setBounds(118, 171, 210, 23);
+		String psavepath = savepathtext.getText()+"\\processresult";
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
 		
-		Button pic_check = new Button(group_2, SWT.CHECK);//图像标注的复选框
+		final Button pic_check = new Button(group_2, SWT.CHECK);//图像标注的复选框
 		pic_check.setSelection(true);
-		pic_check.setBounds(40, 66, 69, 17);
-		pic_check.setText("\u56FE\u50CF\u6807\u6CE8");
+		//		pic_check.setLayoutData(new GridData(GridData.BEGINNING));
+		//		pic_check.setBounds(40, 66, 69, 17);
+				pic_check.setText("\u56FE\u50CF\u6807\u6CE8");
+
+		pictext = new Text(group_2, SWT.BORDER);
+		GridData gd_pictext = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_pictext.widthHint = 152;
+		pictext.setLayoutData(gd_pictext);
+		pictext.setText(picpath);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
 		
 		wav_check = new Button(group_2, SWT.CHECK);//语音识别的复选框
 		wav_check.setSelection(true);
-		wav_check.setBounds(40, 102, 69, 17);
-		wav_check.setText("\u8BED\u97F3\u8BC6\u522B");
-		
-		pictext = new Text(group_2, SWT.BORDER);
-		pictext.setBounds(118, 60, 210, 23);
-		String picpath = savepathtext.getText()+"\\frames";
-		pictext.setText(picpath);
+		//		wav_check.setBounds(40, 102, 69, 17);
+				wav_check.setText("\u8BED\u97F3\u8BC6\u522B");
 		
 		wavtext = new Text(group_2, SWT.BORDER);
-		wavtext.setBounds(118, 96, 210, 23);
-		String wavpath = savepathtext.getText()+"\\wav";
+		GridData gd_wavtext = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_wavtext.widthHint = 150;
+		wavtext.setLayoutData(gd_wavtext);
 		wavtext.setText(wavpath);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
 		
 		Label label = new Label(group_2, SWT.NONE);
-		label.setBounds(40, 171, 61, 17);
-		label.setText("\u4FDD\u5B58\u8DEF\u5F84\uFF1A");
+		//		label.setBounds(40, 171, 61, 17);
+				label.setText("\u4FDD\u5B58\u8DEF\u5F84\uFF1A");
 		
 		psavepathtext = new Text(group_2, SWT.BORDER);
-		psavepathtext.setBounds(118, 171, 210, 23);
-		String psavepath = savepathtext.getText()+"\\processresult";
+		GridData gd_psavepathtext = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_psavepathtext.widthHint = 149;
+		psavepathtext.setLayoutData(gd_psavepathtext);
 		psavepathtext.setText(psavepath);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
+		new Label(group_2, SWT.NONE);
 		
-		new Label(composite_2, SWT.NONE);
-		new Label(composite_2, SWT.NONE);
-		
-		Label lblNewLabel = new Label(composite_2, SWT.NONE);
-		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_lblNewLabel.widthHint = 304;
-		lblNewLabel.setLayoutData(gd_lblNewLabel);
-		lblNewLabel.setText("New Label");
-		new Label(composite_2, SWT.NONE);
-		new Label(composite_2, SWT.NONE);
-		new Label(composite_2, SWT.NONE);
-		
-		pstartbutton = new Button(composite_2, SWT.NONE);
-		pstartbutton.setText("\u5F00\u59CB\u6807\u6CE8");
-//		pstartbutton.setEnabled(false);
-		//TODO:先做一个语音识别的功能出来
-		pstartbutton.addSelectionListener(new SelectionAdapter(){
-			public void widgetSelected(SelectionEvent e){
-//				TODO:校验路径
-				final String wavinpath = wavtext.getText();
-				final String picinpath = pictext.getText();
-				final String outpath = psavepathtext.getText();
-				new Thread(){//为后台开启一个新线程
-					public void run(){
-						taskprocess.start(wavinpath,picinpath, outpath);
+		pstartbutton = new Button(group_2, SWT.NONE);
+		pstartbutton.setText("开始");
+		//		pstartbutton.setEnabled(false);
+				//TODO:先做一个语音识别的功能出来
+				pstartbutton.addSelectionListener(new SelectionAdapter(){
+					public void widgetSelected(SelectionEvent e){
+		//				TODO:校验路径
+						final String wavinpath = wavtext.getText();
+						final String picinpath = pictext.getText();
+						final String outpath = psavepathtext.getText();
+//						int choice = 0;
+						if(wav_check.getSelection() && pic_check.getSelection())
+						{
+//							choice = 1;
+							new Thread(){
+								public void run()
+								{
+									try{
+										taskprocess.start(wavinpath,picinpath, outpath,1);
+									}catch(Exception e)
+									{
+										e.printStackTrace();
+									}
+								}
+							}.start();
+						}
+							
+						else if(wav_check.getSelection())
+						{
+//							choice = 2;
+							new Thread(){
+								public void run()
+								{
+									try{
+										taskprocess.start(wavinpath,picinpath, outpath,2);
+									}catch(Exception e)
+									{
+										e.printStackTrace();
+									}
+								}
+							}.start();
+						}
+						else if(pic_check.getSelection())
+						{
+//							choice = 3;
+							new Thread(){
+								public void run()
+								{
+									try{
+										taskprocess.start(wavinpath,picinpath, outpath,3);
+									}catch(Exception e)
+									{
+										e.printStackTrace();
+									}
+								}
+							}.start();
+						}
+						else//没选功能，什么都不做
+							return;
+						
+					
 					}
-				}.start();
-			}
-		});
+				});
 //		TagButton
 	//composite_2	
 	
@@ -516,7 +606,12 @@ public class taskUI3 {
 				
 				new Thread(){
 					public void run(){
-						taskindex.start(sourcePath,indexPath);
+						try {
+							taskindex.start(sourcePath,indexPath);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 //						label_index.setText(label_index.getText()+"索引建好啦！");
 					}
 				}.start();

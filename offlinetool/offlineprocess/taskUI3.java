@@ -85,6 +85,8 @@ public class taskUI3 {
 	private Label label_3;
 	private Label label_4;
 	private Label label_5;
+	private Label label_6;
+	private Label label_7;
 	
 	/**
 	 * Launch the application.
@@ -359,7 +361,7 @@ public class taskUI3 {
 //		gd_group_2.heightHint = 274;
 //		group_2.setLayoutData(gd_group_2);
 		group_2.setLayoutData(new GridData(GridData.FILL_BOTH));
-		group_2.setLayout(new GridLayout(5,false));
+		group_2.setLayout(new GridLayout(4,false));
 		
 		label_1 = new Label(group_2, SWT.NONE);
 //		label_1.setLayoutData(new GridData(GridData.CENTER));
@@ -373,8 +375,6 @@ public class taskUI3 {
 		String wavpath = savepathtext.getText()+"\\wav";
 //		psavepathtext.setBounds(118, 171, 210, 23);
 		String psavepath = savepathtext.getText()+"\\processresult";
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
@@ -395,7 +395,6 @@ public class taskUI3 {
 		pictext.setText(picpath);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
 		
 		wav_check = new Button(group_2, SWT.CHECK);//语音识别的复选框
 		wav_check.setSelection(true);
@@ -407,8 +406,6 @@ public class taskUI3 {
 		gd_wavtext.widthHint = 150;
 		wavtext.setLayoutData(gd_wavtext);
 		wavtext.setText(wavpath);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
@@ -430,20 +427,23 @@ public class taskUI3 {
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
+		
+		label_6 = new Label(group_2, SWT.NONE);
+		label_6.setText("\u7CFB\u7EDF\u4FE1\u606F\uFF1A");
+		new Label(group_2, SWT.NONE);
+		
+		label_7 = new Label(group_2, SWT.NONE);
+		GridData gd_label_7 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_label_7.heightHint = 24;
+		label_7.setLayoutData(gd_label_7);
+		label_7.setText("\u663E\u793A\u6B63\u5728\u5904\u7406\u7684\u4FE1\u606F");
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
-		new Label(group_2, SWT.NONE);
+		
+	
 		new Label(group_2, SWT.NONE);
 		new Label(group_2, SWT.NONE);
 		
@@ -453,6 +453,7 @@ public class taskUI3 {
 				//TODO:先做一个语音识别的功能出来
 				pstartbutton.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e){
+						label_7.setText("eeee");
 		//				TODO:校验路径
 						final String wavinpath = wavtext.getText();
 						final String picinpath = pictext.getText();
@@ -661,6 +662,9 @@ public class taskUI3 {
 	}
 	public ProgressBar getProgressBar(){
 		return progressBar;
+	}
+	public Label getLabel(){
+		return label_7;
 	}
 	
 	public String getPath(String textname)/*得到gui中的路径，传给Task*/
